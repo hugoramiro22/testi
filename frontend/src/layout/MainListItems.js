@@ -67,6 +67,7 @@ import {
 import {
   BsReplyAll
 } from 'react-icons/bs';
+import { toast } from "react-toastify";
 
 const reducer = (state, action) => {
   if (action.type === "LOAD_CHATS") {
@@ -402,9 +403,13 @@ function ListItemLink(props) {
     }
 
 		try {
-			await api.post(`/users/photo/${user.id}`, formData, config);
-
-
+			await api.post(`/users/photo/${user.id}`, formData, config)
+                .then(res => {
+                  toast.success(res.data.msg);
+                })
+                .catch(err => {
+                  toastError(err);
+                });
 
 		} catch (err) {
 			toastError(err);
@@ -463,8 +468,7 @@ function ListItemLink(props) {
         primary={i18n.t("mainDrawer.listItems.tickets")}
         icon={<ComputerOutlinedIcon />}
       />
-
-
+        
       <ListItemLink
         to="/contacts"
         primary={i18n.t("mainDrawer.listItems.contacts")}
